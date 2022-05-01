@@ -1,0 +1,12 @@
+html{
+  /*
+    em相对于父元素的fint-size
+    rem相对于跟元素（html）的font-size
+    1 rem = 10px
+  */
+  font-size: 62.5%;
+}
+
+html body #root .App{
+  min-height: 100vh;
+}
