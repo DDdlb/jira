@@ -12,6 +12,7 @@ import { useState } from "react"
 import { ProjectModal } from "screen/project-list/project-modal"
 import { ProjectPopover } from "components/project-popover"
 
+// component composition，传递JSX组件，使得子孙组件不用关心函数的实现，只负责传递参数
 export const AuthenticatedApp = ()=>{
     const [projectModalOpen, setProjectModalOpen] = useState(false)
     return <div>
