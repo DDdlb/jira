@@ -6,19 +6,23 @@ import React from "react"
 import { cleanObject, useDebounce, useDocumentTitle, useMount } from "utils"
 import { useHttp } from "utils/http"
 import styled from "@emotion/styled"
-import { Typography } from "antd"
+import { Button, Typography } from "antd"
 import { useAsync } from "utils/use-async"
 import { useUrlQueryParam } from "utils/url"
 import { Row } from "components/lib"
+import { useDispatch } from "react-redux"
+import { projectListActions } from "./project-list.slice"
 // npm start, 从.env.development读取，npm run build 从.env中读取
 
-export const ProjectList = (props: {projectButton: JSX.Element, editButton: JSX.Element})=>{
+export const ProjectList = ()=>{
     const [param, setParam] = useUrlQueryParam(['name', 'personId'])
     const debouncedParam = useDebounce(param, 500)
     // const [list, setList] = useState([])
     const [users, setUsers] = useState([])
     const client = useHttp()
     const { run, isLoading, error, data:list, retry} = useAsync<Project[]>()
+
+    const dispatch = useDispatch()
 
     const fetchProject = ()=>client(['projects', {data:cleanObject(debouncedParam)}])
     // 当param变化时执行, 变化后执行
@@ -38,11 +42,11 @@ export const ProjectList = (props: {projectButton: JSX.Element, editButton: JSX.
     return <Container>
         <Row between={true}>
             <h1>项目列表</h1>
-            {props.projectButton}
+            <Button onClick={()=>dispatch(projectListActions.openProjectModal())}>创建项目</Button>
         </Row>
         <SearchPanel param={param} setParam={setParam} users={users} />
         {error? <Typography.Text type={"danger"}>{error.message}</Typography.Text>:null}
-        <List loading={isLoading} dataSource={list || []} users={users} refresh={retry} projectButton={props.editButton} />
+        <List loading={isLoading} dataSource={list || []} users={users} refresh={retry} />
     </Container>
 }
 

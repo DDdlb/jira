@@ -1,13 +1,17 @@
 import { Popover, Typography, List, Divider, Button } from "antd";
 import React, { useEffect } from "react";
+import { useDispatch } from "react-redux";
 import { Project } from "screen/project-list/list";
+import { projectListActions } from "screen/project-list/project-list.slice";
 import { useHttp } from "utils/http";
 import { useAsync } from "utils/use-async";
 
 
-export const ProjectPopover = (props:{projectButton: JSX.Element})=>{
+export const ProjectPopover = ()=>{
+    const dispatch = useDispatch()
+
     const client = useHttp()
-    const { run, isLoading, data:projects} = useAsync<Project[]>()
+    const { run, data:projects} = useAsync<Project[]>()
     const fetchProject = ()=>client(['projects', {}])
     useEffect(()=>{
         run(fetchProject(), {
@@ -26,7 +30,7 @@ export const ProjectPopover = (props:{projectButton: JSX.Element})=>{
             }
         </List>
         <Divider style={{margin: 0}} />
-        {props.projectButton}
+        <Button type={'link'} onClick={()=>dispatch(projectListActions.openProjectModal())}>创建项目</Button>
     </div>
     return <Popover placement={"bottom"} content={content}>
         项目

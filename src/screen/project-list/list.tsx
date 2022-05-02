@@ -5,10 +5,11 @@ import dayjs from "dayjs"
 import { Link } from "react-router-dom"
 import { Pin } from "components/pin"
 import { useEditProject } from "utils/project"
+import { useDispatch } from "react-redux"
+import { projectListActions } from "./project-list.slice"
 interface ListProps extends TableProps<Project>{
     users: User[],
     refresh?: ()=>void,
-    projectButton: JSX.Element
 }
 
 export interface Project{
@@ -21,6 +22,7 @@ export interface Project{
 }
 
 export const List = ({users, ...props}: ListProps)=>{
+    const dispatch = useDispatch()
     const {mutate} = useEditProject()
     // const pinProject = (id: number, pin: boolean) => mutate({id, pin})
     // 柯里化写法
@@ -60,8 +62,9 @@ export const List = ({users, ...props}: ListProps)=>{
             title: '操作',
             render: (value, item)=>{
                 return <span>
-                    {props.projectButton}
+                    <Button style={{marginRight: '10px'}} size={'small'} onClick={()=>dispatch(projectListActions.openProjectModal())}>编辑</Button>
                     <Button danger size={'small'}>删除</Button>
+                    
                 </span>
             }
         }

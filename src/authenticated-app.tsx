@@ -14,19 +14,13 @@ import { ProjectPopover } from "components/project-popover"
 
 // component composition，传递JSX组件，使得子孙组件不用关心函数的实现，只负责传递参数
 export const AuthenticatedApp = ()=>{
-    const [projectModalOpen, setProjectModalOpen] = useState(false)
+
     return <div>
-        <PageHeader projectButton={
-            <Button style={{padding:0}} type={'link'} onClick={()=>setProjectModalOpen(true)} >创建项目</Button>
-        }/>
+        <PageHeader />
         <Main>
             <Router>
                 <Routes>
-                    <Route path={'/projects'} element={<ProjectList projectButton={
-                                <Button style={{padding:0}} type={'link'} onClick={()=>setProjectModalOpen(true)} >创建项目</Button>
-                            } editButton={
-                                <Button style={{marginRight:'10px'}} size={'small'} onClick={()=>setProjectModalOpen(true)}>编辑</Button>
-                            }/>}  
+                    <Route path={'/projects'} element={<ProjectList />}  
                     />
                     <Route path={'/projects/:projectId/*'} element={<ProjectScreen />} />
                     <Route path={'*'} element={<Navigate to={'/projects'} />}></Route>
@@ -34,20 +28,20 @@ export const AuthenticatedApp = ()=>{
             </Router>
             
         </Main>
-        <ProjectModal projectModalOpen={projectModalOpen} onClose={()=>setProjectModalOpen(false)} ></ProjectModal>
+        <ProjectModal></ProjectModal>
     </div>
 }
 
 // AuthenticatedApp运用了 PageHeader,但是PageHeader还未定义？
 // PageHeader为temporal dead zone(暂时性死区)
-const PageHeader = (props:{projectButton: JSX.Element})=>{
+const PageHeader = ()=>{
     const { user, logout } = useAuth()
     return <Header between={true}>
     <HeaderLeft gap={true}>
         {/* <Button type={'link'} onClick={resetRoute}> */}
         <Logo onClick={resetRoute} /> 
 
-        <ProjectPopover {...props}></ProjectPopover>
+        <ProjectPopover></ProjectPopover>
         <h2>管理</h2>
     </HeaderLeft>
     <HeaderRight>

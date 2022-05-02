@@ -1,9 +1,11 @@
 import { useAuth } from "context/auth-context"
 import { Form, Input, Button } from "antd"
+import { useDispatch } from "react-redux"
+
 // import { FormEvent } from "react"
 
 export const LoginScreen = () => {
-
+    const dispatch = useDispatch()
     const {login} = useAuth()
     // HTMLFormElement类型dom包含event.target.elements, 不用HTMLFormElement默认为Element，普通dom对象
     const handleSubmit = (value: {username:string, password:string}) =>{
@@ -12,6 +14,7 @@ export const LoginScreen = () => {
         // const username = (event.currentTarget.elements[0] as HTMLFormElement).value
         // const password = (event.currentTarget.elements[1] as HTMLFormElement).value
         // login({username, password})
+
         login(value)
         // console.log(context);
     }
