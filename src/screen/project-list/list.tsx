@@ -5,10 +5,10 @@ import dayjs from "dayjs"
 import { Link } from "react-router-dom"
 import { Pin } from "components/pin"
 import { useEditProject } from "utils/project"
+import { useProjectModal } from "./util"
 interface ListProps extends TableProps<Project>{
     users: User[],
     refresh?: ()=>void,
-    projectButton: JSX.Element
 }
 
 export interface Project{
@@ -22,6 +22,7 @@ export interface Project{
 
 export const List = ({users, ...props}: ListProps)=>{
     const {mutate} = useEditProject()
+    const {open} = useProjectModal()
     // const pinProject = (id: number, pin: boolean) => mutate({id, pin})
     // 柯里化写法
     const pinProject = (id:number) => (pin: boolean) => mutate({id, pin}).then(props.refresh)
@@ -60,7 +61,7 @@ export const List = ({users, ...props}: ListProps)=>{
             title: '操作',
             render: (value, item)=>{
                 return <span>
-                    {props.projectButton}
+                    <Button size={'small'} onClick={open} style={{marginRight:'10px'}}>编辑</Button>
                     <Button danger size={'small'}>删除</Button>
                 </span>
             }

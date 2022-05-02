@@ -1,11 +1,13 @@
 import { useMemo } from "react"
-import { useSearchParams } from "react-router-dom"
+import { URLSearchParamsInit, useSearchParams } from "react-router-dom"
+import { cleanObject } from "utils";
 
 /**
  *  返回url中指定键的参数值
  */
 export const useUrlQueryParam = <K extends string>(keys: K[])=>{
-    const [searchParams, setSearchParam] = useSearchParams()
+    const [searchParams] = useSearchParams()
+    const setSearchParams = useSetUrlSearchParam();
     // obj 返回引用，导致每次obj都在变化，产生无限循环
     // t obj = {}
     // // eslint-disable-next-line array-callback-return
@@ -28,6 +30,21 @@ export const useUrlQueryParam = <K extends string>(keys: K[])=>{
         // eslint-disable-next-line react-hooks/exhaustive-deps
         [searchParams]
         ),
-        setSearchParam
+        // setSearchParam
+        (params: Partial<{[key in K]: unknown}>) =>{
+            return setSearchParams(params)
+        }
     ] as const
 }
+
+
+export const useSetUrlSearchParam = () => {
+    const [searchParams, setSearchParam] = useSearchParams();
+    return (params: { [key in string]: unknown }) => {
+      const o = cleanObject({
+        ...Object.fromEntries(searchParams),
+        ...params,
+      }) as URLSearchParamsInit;
+      return setSearchParam(o);
+    };
+  };
