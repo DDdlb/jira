@@ -5,7 +5,7 @@ import { useHttp } from "utils/http";
 import { useAsync } from "utils/use-async";
 
 
-export const ProjectPopover = (props:{setProjectModalOpen: (isOpen: boolean)=>void})=>{
+export const ProjectPopover = (props:{projectButton: JSX.Element})=>{
     const client = useHttp()
     const { run, isLoading, data:projects} = useAsync<Project[]>()
     const fetchProject = ()=>client(['projects', {}])
@@ -26,7 +26,7 @@ export const ProjectPopover = (props:{setProjectModalOpen: (isOpen: boolean)=>vo
             }
         </List>
         <Divider style={{margin: 0}} />
-        <Button style={{padding:0}} type={'link'} onClick={()=>props.setProjectModalOpen(true)} >创建项目</Button>
+        {props.projectButton}
     </div>
     return <Popover placement={"bottom"} content={content}>
         项目

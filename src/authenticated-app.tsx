@@ -1,5 +1,5 @@
 import { ProjectList } from "screen/project-list"
-import { Dropdown, Menu } from "antd"
+import { Button, Dropdown, Menu } from "antd"
 import { useAuth } from "context/auth-context"
 import styled from "@emotion/styled"
 import {Row} from 'components/lib'
@@ -12,15 +12,21 @@ import { useState } from "react"
 import { ProjectModal } from "screen/project-list/project-modal"
 import { ProjectPopover } from "components/project-popover"
 
-
 export const AuthenticatedApp = ()=>{
     const [projectModalOpen, setProjectModalOpen] = useState(false)
     return <div>
-        <PageHeader setProjectModalOpen={setProjectModalOpen} />
+        <PageHeader projectButton={
+            <Button style={{padding:0}} type={'link'} onClick={()=>setProjectModalOpen(true)} >创建项目</Button>
+        }/>
         <Main>
             <Router>
                 <Routes>
-                    <Route path={'/projects'} element={<ProjectList setProjectModalOpen={setProjectModalOpen} />} />
+                    <Route path={'/projects'} element={<ProjectList projectButton={
+                                <Button style={{padding:0}} type={'link'} onClick={()=>setProjectModalOpen(true)} >创建项目</Button>
+                            } editButton={
+                                <Button style={{marginRight:'10px'}} size={'small'} onClick={()=>setProjectModalOpen(true)}>编辑</Button>
+                            }/>}  
+                    />
                     <Route path={'/projects/:projectId/*'} element={<ProjectScreen />} />
                     <Route path={'*'} element={<Navigate to={'/projects'} />}></Route>
                 </Routes>
@@ -33,14 +39,14 @@ export const AuthenticatedApp = ()=>{
 
 // AuthenticatedApp运用了 PageHeader,但是PageHeader还未定义？
 // PageHeader为temporal dead zone(暂时性死区)
-const PageHeader = (props:{setProjectModalOpen: (isOpen: boolean)=>void})=>{
+const PageHeader = (props:{projectButton: JSX.Element})=>{
     const { user, logout } = useAuth()
     return <Header between={true}>
     <HeaderLeft gap={true}>
         {/* <Button type={'link'} onClick={resetRoute}> */}
         <Logo onClick={resetRoute} /> 
 
-        <ProjectPopover setProjectModalOpen={props.setProjectModalOpen}></ProjectPopover>
+        <ProjectPopover {...props}></ProjectPopover>
         <h2>管理</h2>
     </HeaderLeft>
     <HeaderRight>

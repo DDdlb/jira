@@ -8,7 +8,7 @@ import { useEditProject } from "utils/project"
 interface ListProps extends TableProps<Project>{
     users: User[],
     refresh?: ()=>void,
-    setProjectModalOpen: (isOpen: boolean)=>void
+    projectButton: JSX.Element
 }
 
 export interface Project{
@@ -60,7 +60,7 @@ export const List = ({users, ...props}: ListProps)=>{
             title: '操作',
             render: (value, item)=>{
                 return <span>
-                    <Button style={{marginRight:'10px'}} size={'small'} onClick={()=>props.setProjectModalOpen(true)}>编辑</Button>
+                    {props.projectButton}
                     <Button danger size={'small'}>删除</Button>
                 </span>
             }

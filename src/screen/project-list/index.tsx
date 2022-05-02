@@ -6,13 +6,13 @@ import React from "react"
 import { cleanObject, useDebounce, useDocumentTitle, useMount } from "utils"
 import { useHttp } from "utils/http"
 import styled from "@emotion/styled"
-import { Button, Typography } from "antd"
+import { Typography } from "antd"
 import { useAsync } from "utils/use-async"
 import { useUrlQueryParam } from "utils/url"
 import { Row } from "components/lib"
 // npm start, 从.env.development读取，npm run build 从.env中读取
 
-export const ProjectList = (props: {setProjectModalOpen: (isOpen: boolean)=>void})=>{
+export const ProjectList = (props: {projectButton: JSX.Element, editButton: JSX.Element})=>{
     const [param, setParam] = useUrlQueryParam(['name', 'personId'])
     const debouncedParam = useDebounce(param, 500)
     // const [list, setList] = useState([])
@@ -38,11 +38,11 @@ export const ProjectList = (props: {setProjectModalOpen: (isOpen: boolean)=>void
     return <Container>
         <Row between={true}>
             <h1>项目列表</h1>
-            <Button onClick={()=>props.setProjectModalOpen(true)}>创建项目</Button>
+            {props.projectButton}
         </Row>
         <SearchPanel param={param} setParam={setParam} users={users} />
         {error? <Typography.Text type={"danger"}>{error.message}</Typography.Text>:null}
-        <List loading={isLoading} dataSource={list || []} users={users} refresh={retry} setProjectModalOpen={props.setProjectModalOpen} />
+        <List loading={isLoading} dataSource={list || []} users={users} refresh={retry} projectButton={props.editButton} />
     </Container>
 }
 
