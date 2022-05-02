@@ -5,9 +5,6 @@ import dayjs from "dayjs"
 import { Link } from "react-router-dom"
 import { Pin } from "components/pin"
 import { useEditProject } from "utils/project"
-import { ProgressPlugin } from "webpack"
-import Item from "antd/lib/list/Item"
-
 interface ListProps extends TableProps<Project>{
     users: User[],
     refresh?: ()=>void,
