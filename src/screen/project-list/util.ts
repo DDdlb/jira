@@ -1,4 +1,5 @@
-import { useUrlQueryParam } from 'utils/url';
+import { useProject } from 'utils/project';
+import { useSetUrlSearchParam, useUrlQueryParam } from 'utils/url';
 
 /**
  *  根据url管理projectModal
@@ -8,13 +9,25 @@ export const useProjectModal = ()=>{
     const [{projectCreate}, setProjectCreate] = useUrlQueryParam([
         'projectCreate'
     ])
+    // URl中editingProjectId表示编辑
+    const [{editingProjectId}, setEditingProjectId] = useUrlQueryParam(['editingProjectId'])
+
+    const {data: editingProject, isLoading} = useProject(Number(editingProjectId))
+
+    const setUrlParams = useSetUrlSearchParam();
 
     const open = ()=> setProjectCreate({projectCreate: true})
-    const close = ()=> setProjectCreate({projectCreate: undefined})
+    const close = ()=> {
+        setUrlParams({editingProjectId: '', projectCreate: ''})
+    }
+    const startEdit = (id:number) => setEditingProjectId({editingProjectId: id})
 
     return {
-        projectModalOpen: projectCreate === 'true',
+        projectModalOpen: projectCreate === 'true' || Boolean(editingProjectId),
         open,
-        close
+        close,
+        startEdit,
+        editingProject,
+        isLoading
     }
 }

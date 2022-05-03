@@ -22,10 +22,10 @@ export interface Project{
 
 export const List = ({users, ...props}: ListProps)=>{
     const {mutate} = useEditProject()
-    const {open} = useProjectModal()
+    const {startEdit} = useProjectModal()
     // const pinProject = (id: number, pin: boolean) => mutate({id, pin})
     // 柯里化写法
-    const pinProject = (id:number) => (pin: boolean) => mutate({id, pin}).then(props.refresh)
+    const pinProject = (id:number) => (pin: boolean) => mutate({id, pin})
     return <Table columns={[
         {
             title: <Pin checked={true} disabled={true} />,
@@ -61,7 +61,7 @@ export const List = ({users, ...props}: ListProps)=>{
             title: '操作',
             render: (value, item)=>{
                 return <span>
-                    <Button size={'small'} onClick={open} style={{marginRight:'10px'}}>编辑</Button>
+                    <Button size={'small'} onClick={()=>startEdit(item.id)} style={{marginRight:'10px'}}>编辑</Button>
                     <Button danger size={'small'}>删除</Button>
                 </span>
             }
